@@ -1,14 +1,10 @@
 try:
     from tkinter import *
 except:
-    print("Please, install tkinter (pip install tkinter or apt install python3-tk)")
+    print("Please, install tkinter (pip install tkinter or apt install python3-tk) and launch again")
     exit()
 
-try:
-    import math
-except:
-    print("Issue while loading the math library")
-    exit()
+import math
 
 class mesh:
     def __init__(self, verts = [], faces = []):
@@ -36,19 +32,15 @@ class cam:
         
         #Transform
         if t in ['z', 'Z', 'Up']:
-            #self.pos[2] -= self.vit
             self.pos[0] -= x
             self.pos[2] -= y
         elif t in ['s', 'S', 'Down']:
-            #self.pos[2] += self.vit
             self.pos[0] += x
             self.pos[2] += y
         elif t in ['q', 'Q', 'Left']:
-            #self.pos[0] += self.vit
             self.pos[0] += y
             self.pos[2] -= x
         elif t in ['d', 'D', 'Right']:
-            #self.pos[0] -= self.vit
             self.pos[0] -= y
             self.pos[2] += x
         elif t in ['a', 'A']:
@@ -166,7 +158,7 @@ class moteur:
                 order = sorted(range(len(face_l)), key=lambda i: depth[i], reverse=1)
             
             for i in order:
-                self.displayedObj.append(self.can.create_polygon(face_l[i], fill=face_color[i], width=5, outline='Black'))
+                self.displayedObj.append(self.can.create_polygon(face_l[i], fill=face_color[i], width=3, outline='Black'))
             
             # Point
             #for ox,oy,oz in obj.mesh.verts:

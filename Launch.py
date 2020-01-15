@@ -1,14 +1,5 @@
-try:
-    from moteur import *
-except:
-    print("Issue while loading the motor lib")
-    exit()
-
-#try:
+from moteur import *
 import objtomesh
-#except:
-    #print("Issue while loading the ObjToMesh lib")
-    #exit()
 
 
 moteur = moteur(1080/2,1080/2)

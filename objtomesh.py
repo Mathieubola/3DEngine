@@ -15,12 +15,8 @@ def importobj(path):
     for ligne in ctn.split('\n'):
         if len(ligne) > 0:
             if 'v ' in ligne:
-                v = ligne.split(' ')
-                vert.append([float(v[1]), float(v[2]), float(v[3])])
+                vert.append([float(ligne.split(' ')[i]) for i in range(1,4)])
             elif 'f ' in ligne:
-                f_temp = []
-                for i in ligne.split(' ')[1:]:
-                    f_temp.append(int(i.split('/')[0])-1)
-                faces.append(f_temp)
+                faces.append([int(i.split('/')[0])-1 for i in ligne.split(' ')[1:]])
 
     return mesh(vert, faces)

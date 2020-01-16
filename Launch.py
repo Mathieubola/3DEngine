@@ -2,7 +2,7 @@ from moteur import *
 import objtomesh
 
 
-moteur = moteur(1080/2,1080/2)
+moteur = moteur(1920/2,1080/2)
 
 #moteur.addobj(mesh(
 #[[-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1], [-1,-1,1], [1,-1,1], [1,1,1], [-1,1,1]],

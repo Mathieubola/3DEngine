@@ -108,28 +108,8 @@ class moteur:
             screen_co = []
             for ox, oy, oz in obj.mesh.verts:
 
-                ox += obj.x
-                oy += obj.y
-                oz += obj.z
-                ox += self.camera.pos[0]
-                oy += self.camera.pos[1]
-                oz += self.camera.pos[2]
-
-                ox, oz = rotate2d((ox, oz), self.camera.rot[1])
-                oy, oz = rotate2d((oy, oz), self.camera.rot[0])
-
-                vert_l.append([ox, oy, oz])
-
-                try:
-                    fx=(self.x/2)/oz
-                    fy=(self.y/2)/oz
-                except:
-                    fx=999
-                    fy=999
-
-                px,py = ox*fx, oy*fy
-                px+=self.x/2
-                py+=self.y/2
+                px, py, l = self.project(ox, oy, oz, obj, 1)
+                vert_l.append(l)
 
                 screen_co.append([int(px), int(py)])
 
@@ -144,7 +124,8 @@ class moteur:
                 on_screen = 0
 
                 for i in face:
-                    if vert_l[i][2]>0:
+                    x,y = screen_co[i]
+                    if vert_l[i][2]>0 and x>0 and x<self.x and y>0 and y<self.y:
                         on_screen = 1
                         break
                 
@@ -159,14 +140,9 @@ class moteur:
             
             for i in order:
                 self.displayedObj.append(self.can.create_polygon(face_l[i], fill=face_color[i], width=3, outline='Black'))
-            
-            # Point
-            #for ox,oy,oz in obj.mesh.verts:
-                #px, py = self.project(ox, oy, oz, obj)
-                #self.displayedObj.append(self.can.create_oval(px-3, py-3, px+3, py+3, fill='white'))
 
     
-    def project(self, ox, oy, oz, obj):
+    def project(self, ox, oy, oz, obj, needvl = 0):
 
         #Object coord transform
         ox += obj.x
@@ -177,6 +153,10 @@ class moteur:
         ox += self.camera.pos[0]
         oy += self.camera.pos[1]
         oz += self.camera.pos[2]
+
+        #Verticle list
+        if (needvl):
+            vl=[ox, oy, oz]
 
         #Camera rotation
         ox, oz = rotate2d((ox, oz), self.camera.rot[1])
@@ -193,7 +173,10 @@ class moteur:
         px+=self.x/2
         py+=self.y/2
 
-        return px, py
+        if needvl:
+            return px, py, vl
+        else:
+            return px, py
                 
     
     def mainloop(self):

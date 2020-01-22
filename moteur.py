@@ -89,10 +89,20 @@ class moteur:
 
         self.loop()
     
+    def bind(self, key, func):
+        if key=='<Loop>':
+            self.loopdev = func
+        elif key=='<Key>':
+            self.fen.bind('<Key>', func)
+    
+    def loopdev(self):
+        return 1
+
     def loop(self):
         global rad
         self.clear()
         self.render()
+        self.loopdev()
         self.fen.after(int(1000/self.fps), self.loop)
     
     def clear(self):
@@ -185,7 +195,7 @@ class moteur:
     def addobj(self, mesh, x, y, z):
         obje = obj(mesh, x, y, z)
         self.objs.append(obje)
-        return self.objs.index(obje)
+        return obje
 
 def rotate2d(pos, rad):
     x,y = pos

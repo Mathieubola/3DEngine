@@ -10,13 +10,68 @@ class mesh:
     def __init__(self, verts = [], faces = []):
         self.verts = verts
         self.faces = faces
+    
+    def copy(self, mesh2):
+        self.verts = mesh2.verts
+        self.faces = mesh2.faces
 
 class obj:
-    def __init__(self, mesh, x, y, z):
+    def __init__(self, mesh, x=0, y=0, z=0, rotx=0, roty=0, rotz=0, scalex=1, scaley=1, scalez=1):
         self.mesh = mesh
         self.x = x
         self.y = y
         self.z = z
+        self.rotx = rotx
+        self.roty = roty
+        self.rotz = rotz
+        self.scalex = scalex
+        self.scaley = scaley
+        self.scalez = scalez
+
+        self.modify()
+    
+    def coords(self, x='x', y='x', z='x', rotx='x', roty='x', rotz='x', scalex='x', scaley='x', scalez='x'):
+        if not(int(x) != x):
+            self.x = x
+        if not(int(y) != y):
+            self.y = y
+        if not(int(z) != z):
+            self.z = z
+        if not(int(rotx) != rotx):
+            self.rotx = rotx
+        if not(int(roty) != roty):
+            self.roty = roty
+        if not(int(rotz) != rotz):
+            self.rotz = rotz
+        if not(int(scalex) != scalex):
+            self.scalex = scalex
+        if not(int(scaley) != scaley):
+            self.scaley = scaley
+        if not(int(scalez) != scalez):
+            self.scalez = scalez
+
+        modify()
+    
+    def modify(self):
+        try:
+            self.modifmesh.copy(self.mesh)
+        except:
+            self.modifmesh = mesh()
+            self.modifmesh.copy(self.mesh)
+        
+        for i in self.modifmesh.verts:
+            if not(self.scalex==1 and self.scaley==1 and self.scalez==1):
+                i[0] *= self.scalex
+                i[1] *= self.scaley
+                i[2] *= self.scalez
+        
+            if not(self.x==0 and self.y==0 and self.z==0):
+                i[0] += self.x
+                i[1] += self.y
+                i[2] += self.z
+    
+    def getMesh(self):
+        return self.modifmesh
 
 class cam:
     def __init__(self, pos=[0,0,0], rot=[0,0,0], vit=1, vrad=0.05):
@@ -116,7 +171,7 @@ class moteur:
             
             vert_l = []
             screen_co = []
-            for ox, oy, oz in obj.mesh.verts:
+            for ox, oy, oz in obj.getMesh().verts:
 
                 px, py, l = self.project(ox, oy, oz, obj, 1)
                 vert_l.append(l)
@@ -128,8 +183,8 @@ class moteur:
             face_l = []
             face_color = []
             depth = []
-            for f in range(len(obj.mesh.faces)):
-                face = obj.mesh.faces[f]
+            for f in range(len(obj.getMesh().faces)):
+                face = obj.getMesh().faces[f]
 
                 on_screen = 0
 
@@ -155,9 +210,9 @@ class moteur:
     def project(self, ox, oy, oz, obj, needvl = 0):
 
         #Object coord transform
-        ox += obj.x
-        oy += obj.y
-        oz += obj.z
+        #ox += obj.x
+        #oy += obj.y
+        #oz += obj.z
 
         #Camera transform
         ox += self.camera.pos[0]
@@ -192,8 +247,8 @@ class moteur:
     def mainloop(self):
         self.fen.mainloop()
     
-    def addobj(self, mesh, x, y, z):
-        obje = obj(mesh, x, y, z)
+    def addobj(self, mesh, x, y, z, rx, ry, rz, sx, sy, sz):
+        obje = obj(mesh, x, y, z, rx, ry, rz, sx, sy, sz)
         self.objs.append(obje)
         return obje
 
